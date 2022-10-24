@@ -10,13 +10,18 @@
             <app-footer></app-footer>
         </div>
     </div>
+    
     <div class="fixed-plugin">
         <div class="dropdown show-dropdown open show">
             <a href="#" data-toggle="dropdown" aria-expanded="true">
+                
+                 <i class="fa fa-shopping-cart fa-3x"></i>
                 <i class="fa fa-cog fa-2x"> </i>
             </a>
             <ul class="dropdown-menu show" x-placement="bottom-start" style="position: absolute; top: 41px; left: -231px; will-change: top, left;">
-                <li class="header-title"> Sidebar Filters</li>
+                
+                <li class="header-title">Cart</li>
+                
                 <li class="adjustments-line">
                     <a href="javascript:void(0)" class="switch-trigger active-color">
                         <div class="ml-auto mr-auto">
@@ -29,49 +34,40 @@
                         <div class="clearfix"></div>
                     <div class="ripple-container"></div></a>
                 </li>
-                <li class="header-title">Images</li>
-                <li>
-                    <a class="img-holder switch-trigger" href="javascript:void(0)">
-                        <img src="./assets/img/sidebar-1.jpg" alt="">
-                    </a>
-                </li>
-                <li>
-                    <a class="img-holder switch-trigger" href="javascript:void(0)">
-                        <img src="./assets/img/sidebar-2.jpg" alt="">
-                    <div class="ripple-container"></div></a>
-                </li>
-                <li>
-                    <a class="img-holder switch-trigger" href="javascript:void(0)">
-                        <img src="./assets/img/sidebar-3.jpg" alt="">
-                    </a>
-                </li>
-                <li class="active">
-                    <a class="img-holder switch-trigger" href="javascript:void(0)">
-                        <img src="./assets/img/sidebar-4.jpg" alt="">
-                    </a>
-                </li>
-                <li class="button-container">
-                    <div>
-                        <button class="btn btn-info btn-block btn-fill" data-toggle="modal" data-target="#buy">
-                            Download Free
-                        </button>
+                
+                <li class="button-container text-center" *ngFor="let item of customerCart">
+                    <div class="text-center">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div style="padding-top: 15%">
+                                    {{item.name}} x {{item.quantity}}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <a (click)="decrementItem(item.menuId)" class="btn btn-danger" style="height: 80%">
+                                    -
+                                </a>
+                            </div>
+                            <div class="col-md-2">
+                                <a (click)="incrementItem(item.menuId)" class="btn btn-info btn-fill" style="height: 80%">
+                                    +
+                                </a>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                        
                     </div>
                 </li>
-                <li class="button-container">
+
+                <li class="button-container text-center">
                     <div>
-                        <button class="btn btn-warning btn-block btn-fill" data-toggle="modal" data-target="#buy">
-                            Buy Pro
-                        </button>
+                      <a *ngIf="customerCart" class="btn btn-info btn-block" style="background-color: #2CA8FF;">
+                          Place Order
+                      </a>
                     </div>
-                </li>
-                <li class="button-container text-center" routerLinkActive="active">
-                  <div>
-                    <a class="btn btn-default btn-block" href="https://demos.creative-tim.com/material-dashboard-angular2/#/documentation/tutorial">
-                        View Documentation
-                    </a>
-                  </div>
-                </li>
+                  </li>
             </ul>
+            
         </div>
     </div>
 </div>

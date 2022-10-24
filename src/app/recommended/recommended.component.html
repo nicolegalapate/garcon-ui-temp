@@ -1,10 +1,11 @@
 <div class="main-content">
     <div class="container-fluid">
-
+        <div class="row">
+            <button (click)="addChefRecommended()"class="btn btn-info btn-block btn-fill col-md-6">Add Chef's Recommendations to cart</button>
+        </div>
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <h3>Appetizers</h3>
-                
             </div>
         </div>
         <div *ngIf="appetizerItems!=null" class="row">
@@ -21,13 +22,8 @@
                         
                     </div>
                     <div class="card-footer">
-                        
                         <p class="card-title">{{item.description}}</p>
-                   
                     </div>
-                    <button class="btn btn-info btn-block btn-fill" (click)="setQty(item.id)" data-toggle="modal" data-target="#addtocart">
-                        Add to Cart
-                    </button>
                 </div>
             </div>
         </div>
@@ -54,9 +50,6 @@
                             <p>{{item.description}}</p>
                         </div>
                     </div>
-                    <button class="btn btn-info btn-block btn-fill" (click)="setQty(item.id)" data-toggle="modal" data-target="#addtocart">
-                        Add to Cart
-                    </button>
                 </div>
             </div>
         </div>
@@ -80,13 +73,10 @@
                     </div>
                     <div class="card-footer">
                         <div class="stats">
-                            
+                           
                             <p>{{item.description}}</p>
                         </div>
                     </div>
-                    <button class="btn btn-info btn-block btn-fill" (click)="setQty(item.id)" data-toggle="modal" data-target="#addtocart">
-                        Add to Cart
-                    </button>
                 </div>
             </div>
         </div>
@@ -115,49 +105,11 @@
                             <p>{{item.description}}</p>
                         </div>
                     </div>
-                    <button class="btn btn-info btn-block btn-fill" (click)="setQty(item.id)" data-toggle="modal" data-target="#addtocart">
-                        Add to Cart
-                    </button>
                 </div>
             </div>
         </div>
+
     </div>
-</div>
 
-<!--ADD TO CART MODAL-->
-
-
-<div  *ngIf="selectedItem" class="modal modal-angular fade" id="addtocart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body text-center">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="margin-top">
-                    Add to Cart
-                </h4>
-                <div class="separator"></div>
-                
-                <div class="row">
-                    <div class="col-sm-1"></div>
-                    <h3 style="padding-left: 10px">
-                        {{selectedItem.name}}
-                    </h3>
-                
-                    <div class="plusminuscontainer">
-                        <div class="wrapper">
-                            <button class="plusminus" (click)="handleMinus()">-</button>
-                            <input type="number" class="num" value={{tempQty}} [(ngModel)]="value" />
-                            <button class="plusminus" (click)="handlePlus()">+</button>
-                        </div>
-                    </div>
-                    
-                    <button class="btn btn-info btn-block btn-fill" (click)="addToCart(selectedItem.id, selectedItem.name, value)" data-dismiss="modal">
-                        Add to Cart
-                    </button>
-                </div>
-                
-            </div>
-        </div>
-    </div>
     
 </div>

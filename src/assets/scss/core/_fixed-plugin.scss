@@ -44,10 +44,15 @@
     border-radius: 0 0 6px 6px;
     width: auto;
 }
+.fixed-plugin .fa-shopping-cart {
+    color: #FFFFFF;
+    padding: 10px;
+    border-radius: 0 0 6px 6px;
+    width: auto; }
 .fixed-plugin .dropdown-menu{
     right: 80px;
     left: auto;
-    width: 290px;
+    width: 360px;
     border-radius: 0.1875rem;
     padding: 0 10px;
 }
@@ -255,7 +260,7 @@
     top: -40px !important;
     opacity: 0;
     visibility: hidden;
-    left: -303px !important;
+    left: -420px !important;
     transform-origin: 100% 0;
 }
 .fixed-plugin .dropdown.show .dropdown-menu{
@@ -270,7 +275,7 @@
     display: inline-block;
     position: absolute;
     top: 65px;
-    width: 16px;
+    /*width: 400px;*/
     transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
     -moz-transform: translateY(-50%);

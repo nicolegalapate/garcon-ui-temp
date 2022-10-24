@@ -13234,6 +13234,12 @@ h2.title {
   border-radius: 0 0 6px 6px;
   width: auto; }
 
+.fixed-plugin .fa-shopping-cart {
+  color: #FFFFFF;
+  padding: 10px;
+  border-radius: 0 0 6px 6px;
+  width: auto; }
+
 .fixed-plugin .dropdown-menu {
   right: 80px;
   left: auto;
