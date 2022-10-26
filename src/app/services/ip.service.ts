@@ -6,11 +6,10 @@ import { Component, Injectable, OnInit} from '@angular/core';
 })
 
 export class IpService {
-    private url = 'https://ip.nf/me.json';
+    private url = 'http://api.ipify.org/?format=json';
 
     constructor(private httpClient:HttpClient){ }
     getIpAddress(){
-        let res = this.httpClient.get(this.url);        
-        return res;
+        return this.httpClient.get(this.url);
     }
 }

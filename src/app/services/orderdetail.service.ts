@@ -6,21 +6,21 @@ import { GlobalComponent } from 'app/global.component';
     providedIn: 'root'
 })
 
-export class OrderService {
-    private url = 'https://localhost:7130/api/Order';
-    private getOrder = 'https://localhost:7130/api/Order/Customer/';
-
+export class OrderDetailService {
+    private url = 'https://localhost:7130/api/OrderDetail';
+    private geturl = 'https://localhost:7130/api/OrderDetail/id?orderId='
     constructor(private httpClient:HttpClient){ }
     
     //add order
-    addOrder(req){
+    submitOrderDetail(req){
         let req_json = JSON.parse(JSON.stringify(req));
-        
         return this.httpClient.post(this.url, req_json);
     }
 
-    //getOrderByCustomerNbr
-    getOrderbyCustomerNbr(req){
-        return this.httpClient.get(this.getOrder + req)
+    //getOrderDetails
+    getOrderDetails(id){
+        console.log(this.geturl + id);
+        return this.httpClient.get(this.geturl+id);
+        
     }
 }

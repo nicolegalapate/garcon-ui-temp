@@ -53,17 +53,85 @@ export class RecommendedComponent implements OnInit {
 
   addChefRecommended(){
     this.appetizerItems.forEach((obj) => {
-      GlobalComponent.customerCart.push({menuId: obj.id, name: obj.name, quantity: 1});
+      let check = GlobalComponent.customerCart.find(x => x.menuId === obj.id);
+      if (check) { //exists in cart
+        let idx = GlobalComponent.customerCart.indexOf(check);
+        let foodItem = {
+          menuId: obj.id,
+          name: check.name,
+          quantity: check.quantity + 1
+        }
+        if (foodItem.quantity == 0) {
+          GlobalComponent.customerCart.splice(idx, 1);
+        } 
+        else {
+          GlobalComponent.customerCart[idx] = foodItem;
+        }
+      } else {
+        GlobalComponent.customerCart.push({menuId: obj.id, name: obj.name, quantity: 1});
+      }
     });
+
     this.mainCourseItems.forEach((obj) => {
-      GlobalComponent.customerCart.push({menuId: obj.id, name: obj.name, quantity: 1});
+      let check = GlobalComponent.customerCart.find(x => x.menuId === obj.id);
+      if (check) { //exists in cart
+        let idx = GlobalComponent.customerCart.indexOf(check);
+        let foodItem = {
+          menuId: obj.id,
+          name: check.name,
+          quantity: check.quantity + 1
+        }
+        if (foodItem.quantity == 0) {
+          GlobalComponent.customerCart.splice(idx, 1);
+        } 
+        else {
+          GlobalComponent.customerCart[idx] = foodItem;
+        }
+      } else {
+        GlobalComponent.customerCart.push({menuId: obj.id, name: obj.name, quantity: 1});
+      }
     });
+
     this.dessertItems.forEach((obj) => {
-      GlobalComponent.customerCart.push({menuId: obj.id, name: obj.name, quantity: 1});
+      let check = GlobalComponent.customerCart.find(x => x.menuId === obj.id);
+      if (check) { //exists in cart
+        let idx = GlobalComponent.customerCart.indexOf(check);
+        let foodItem = {
+          menuId: obj.id,
+          name: check.name,
+          quantity: check.quantity + 1
+        }
+        if (foodItem.quantity == 0) {
+          GlobalComponent.customerCart.splice(idx, 1);
+        } 
+        else {
+          GlobalComponent.customerCart[idx] = foodItem;
+        }
+      } else {
+        GlobalComponent.customerCart.push({menuId: obj.id, name: obj.name, quantity: 1});
+      }
     });
+    
     this.drinkItems.forEach((obj) => {
-      GlobalComponent.customerCart.push({menuId: obj.id, name: obj.name, quantity: 1});
+      let check = GlobalComponent.customerCart.find(x => x.menuId === obj.id);
+      if (check) { //exists in cart
+        let idx = GlobalComponent.customerCart.indexOf(check);
+        let foodItem = {
+          menuId: obj.id,
+          name: check.name,
+          quantity: check.quantity + 1
+        }
+        if (foodItem.quantity == 0) {
+          GlobalComponent.customerCart.splice(idx, 1);
+        } 
+        else {
+          GlobalComponent.customerCart[idx] = foodItem;
+        }
+      } else {
+        GlobalComponent.customerCart.push({menuId: obj.id, name: obj.name, quantity: 1});
+      }
     });
+    
     console.log(GlobalComponent.customerCart);
   }
 }

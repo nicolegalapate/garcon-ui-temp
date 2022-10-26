@@ -1,10 +1,14 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { Location, LocationStrategy, PathLocationStrategy, PopStateEvent } from '@angular/common';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { GlobalComponent } from 'app/global.component';
+import { IpService } from 'app/services/ip.service';
+import { OrderService } from 'app/services/order.service';
+import { OrderDetailService } from 'app/services/orderdetail.service';
 import PerfectScrollbar from 'perfect-scrollbar';
 import * as $ from "jquery";
 import { filter, Subscription } from 'rxjs';
+import { response } from 'express';
 
 @Component({
     selector: 'app-admin-layout',
@@ -16,10 +20,21 @@ export class AdminLayoutComponent implements OnInit {
     private lastPoppedUrl: string;
     private yScrollStack: number[] = [];
     public customerCart = GlobalComponent.customerCart;
-    constructor(public location: Location, private router: Router) { }
+    private ipAddress: any;
+    private orderRequest: any;
+    public href: string = '';
+    @Output() orderPlaced:any;
+
+    constructor(
+        public location: Location, 
+        private router: Router, 
+        private ipService: IpService, 
+        private orderService: OrderService, 
+        private orderDetailService: OrderDetailService,
+        ) { }
 
     ngOnInit() {
-
+        
         const isWindows = navigator.platform.indexOf('Win') > -1 ? true : false;
 
         if (isWindows && !document.getElementsByTagName('body')[0].classList.contains('sidebar-mini')) {
@@ -70,7 +85,7 @@ export class AdminLayoutComponent implements OnInit {
         }
 
         $('.fixed-plugin a').click(function (event) {
-            // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
+            // click on switch, stop propagation of the event, so the dropdown will not be hidden, otherwise we set the  section active
             if ($(this).hasClass('switch-trigger')) {
                 if (event.stopPropagation) {
                     event.stopPropagation();
@@ -129,7 +144,7 @@ export class AdminLayoutComponent implements OnInit {
         });
     }
 
-    
+
     ngAfterViewInit() {
         this.runOnRouteChange();
     }
@@ -158,43 +173,88 @@ export class AdminLayoutComponent implements OnInit {
         return bool;
     }
 
-    decrementItem(id){
+    decrementItem(id) {
         let check = GlobalComponent.customerCart.find(x => x.menuId === id);
-        if(check){
+        if (check) {
             let idx = GlobalComponent.customerCart.indexOf(check);
             let foodItem = {
                 menuId: id,
-                name: check.name, 
+                name: check.name,
                 quantity: check.quantity - 1
             }
-            if(foodItem.quantity == 0) {
+            if (foodItem.quantity == 0) {
                 GlobalComponent.customerCart.splice(idx, 1);
             } else {
                 GlobalComponent.customerCart[idx] = foodItem;
             }
-            
+
         }
     }
 
-    incrementItem(id){
+    incrementItem(id) {
         let check = GlobalComponent.customerCart.find(x => x.menuId === id);
-        if(check){
+        if (check) {
             let idx = GlobalComponent.customerCart.indexOf(check);
             let foodItem = {
                 menuId: id,
-                name: check.name, 
+                name: check.name,
                 quantity: check.quantity + 1
             }
-            if(foodItem.quantity == 0) {
+            if (foodItem.quantity == 0) {
                 GlobalComponent.customerCart.splice(idx, 1);
             } else {
                 GlobalComponent.customerCart[idx] = foodItem;
             }
-            
         }
     }
 
-    placeOrder(){
+    createOrder() {
+        //get ip address 
+         
+         this.ipService.getIpAddress().subscribe(response => {
+            let res = JSON.parse(JSON.stringify(response));
+            this.ipAddress = res.ip;
+            console.log(this.ipAddress);
+
+            this.orderRequest = {
+                "customerNumber": this.ipAddress,
+                "status": 0,
+                "dateCreated": new Date()
+            }
+            this.orderService.addOrder(this.orderRequest).subscribe(res => {
+                let r = JSON.parse(JSON.stringify(res));
+                console.log("r " + r);
+                GlobalComponent.orderId = r.id;
+                console.log("here in order service order id: " + GlobalComponent.orderId);
+
+                GlobalComponent.customerCart.forEach((item) => {
+                    var orderItem = {
+                        "orderId": GlobalComponent.orderId,
+                        "menuId": item.menuId,
+                        "quantity": item.quantity,
+                        "status": 0,
+                        "dateModified": new Date(),
+                        "dateCreated": new Date()
+                    };
+                    this.orderDetailService.submitOrderDetail(orderItem).subscribe(res => {
+                        console.log(res);
+                    })
+                    GlobalComponent.orderDetails.push(orderItem);
+                    //var idx = GlobalComponent.customerCart.indexOf(item);
+                    //GlobalComponent.customerCart.splice(idx, 1);
+                });
+                this.isVisible();
+                //GlobalComponent.href = '/table-list';
+            });
+
+        });
         
+    }
+
+    isVisible(){
+        // return false;
+        this.href = this.router.url;
+        if(this.href=='/table-list') return false; 
+        return true;
     }
 }

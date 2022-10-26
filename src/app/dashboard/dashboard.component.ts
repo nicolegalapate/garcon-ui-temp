@@ -32,17 +32,32 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.populateMenuItems();
-    //this.createOrder();
+    //this.checkExistingTransaction();
+    //this.createOrder();!p dsdsdp!
   }
 
+  checkExistingTransaction() { //in progress 
+    this.ipService.getIpAddress().subscribe(response => {
+      let res = JSON.parse(JSON.stringify(response));
+      this.clientIp = res.ip;
+      console.log(this.clientIp);
+      this.orderService.getOrderbyCustomerNbr(this.clientIp).subscribe(orderResponse => {
+        console.log(orderResponse);
+        let orderRes = JSON.parse(JSON.stringify(orderResponse));
+        console.log('here ' + orderRes);
+      })
+    });
 
-  createOrder(){
+
+  }
+
+  createOrder() {
     this.ipService.getIpAddress().subscribe(response => {
       let res = JSON.parse(JSON.stringify(response));
       this.clientIp = res.ip.ip;
       var req = {
         "customerNumber": this.clientIp,
-        "status": 0, 
+        "status": 0,
         "dateCreated": new Date()
       };
       console.log(req);
@@ -54,10 +69,9 @@ export class DashboardComponent implements OnInit {
   populateMenuItems() {
     this.menuService.getMenus().subscribe(response => {
       this.allMenuItems = response;
-      
+
       //this.initializeQuantities();
       if (this.allMenuItems != null) {
-        console.log(this.allMenuItems);
         this.appetizerItems = this.allMenuItems.filter((obj) => {
           return obj.menuCategory === 0;
         });
@@ -78,51 +92,59 @@ export class DashboardComponent implements OnInit {
     return;
   }
 
-  setQty(menuId){
+  setQty(menuId) {
     return this.selectedItem = this.allMenuItems.find(x => x.id === menuId)
   }
 
-  addToCart(id, n, qty){
+  addToCart(id, n, qty) {
     let foodItem = {
       menuId: id,
       name: n,
       quantity: qty
     }
-    var check = GlobalComponent.customerCart.find(x=> x.menuId === id)
-    if(check){
+    var check = GlobalComponent.customerCart.find(x => x.menuId === id)
+    if (check) {
       console.log(check)
       console.log(GlobalComponent.customerCart);
       let idx = GlobalComponent.customerCart.indexOf(check);
       console.log(idx)
       let foodItem = {
         menuId: id,
-        name: n, 
+        name: n,
         quantity: check.quantity + qty
       }
       GlobalComponent.customerCart[idx] = foodItem;
-    } 
+    }
     else {
       GlobalComponent.customerCart.push(foodItem);
     }
-    
+
     console.log(GlobalComponent.customerCart);
     this.value = 0;
   }
 
-  getQuantity(id){
-    let check = GlobalComponent.customerCart.find(x=> x.menuId ===id);
+  getQuantity(id) {
+    let check = GlobalComponent.customerCart.find(x => x.menuId === id);
     return check.quantity;
   }
 
-  handleMinus(){
-    if(this.value > 0){
+  handleMinus() {
+    if (this.value > 0) {
       this.value--;
     }
   }
 
-  handlePlus(){
+  handlePlus() {
     this.value++;
   }
 
-  
+  checkOrders() {
+    console.log("here");
+    if (GlobalComponent.customerCart.length() == 0) {
+      console.log("no order, disabled");
+      return true;
+    } else return false;
+  }
+
+
 }
