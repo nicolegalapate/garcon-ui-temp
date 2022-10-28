@@ -7,8 +7,9 @@ import { GlobalComponent } from 'app/global.component';
 })
 
 export class OrderDetailService {
-    private url = 'https://localhost:7130/api/OrderDetail';
-    private geturl = 'https://localhost:7130/api/OrderDetail/id?orderId='
+    private url = 'https://localhost:7246/api/OrderDetail';
+    private geturl = 'https://localhost:7246/api/OrderDetail/orderId?orderId='
+    private updateStatusUrl = 'https://localhost:7246/api/OrderDetail/Status'
     constructor(private httpClient:HttpClient){ }
     
     //add order
@@ -22,5 +23,10 @@ export class OrderDetailService {
         console.log(this.geturl + id);
         return this.httpClient.get(this.geturl+id);
         
+    }
+
+    updateOrderDetailStatus(req){
+        let req_json = JSON.parse(JSON.stringify(req));
+        return this.httpClient.put(this.updateStatusUrl, req_json);
     }
 }

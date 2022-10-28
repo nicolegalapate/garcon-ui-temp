@@ -7,7 +7,7 @@ import { GlobalComponent } from 'app/global.component';
 })
 
 export class MenuService {
-    private url = 'https://localhost:7130/api/Menu';
+    private url = 'https://localhost:7246/api/Menu';
 
     constructor(private httpClient:HttpClient){ }
     getMenus(){

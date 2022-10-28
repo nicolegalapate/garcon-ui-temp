@@ -236,9 +236,23 @@ export class AdminLayoutComponent implements OnInit {
                         "dateModified": new Date(),
                         "dateCreated": new Date()
                     };
-                    this.orderDetailService.submitOrderDetail(orderItem).subscribe(res => {
-                        console.log(res);
-                    })
+                    this.orderDetailService.submitOrderDetail(orderItem).subscribe(
+                        res => {
+                            console.log(res);
+                            var r = JSON.parse(JSON.stringify(res))
+                            var orderStatusUpdate = {
+                                "id": r.id,
+                                "status": 1,
+                                "dateModified": new Date ()
+                            }
+                            console.log(orderStatusUpdate);
+                            this.orderDetailService.updateOrderDetailStatus(orderStatusUpdate).subscribe(
+                                response => {
+                                    console.log(response);
+                                }
+                            )
+                        }
+                    )
                     GlobalComponent.orderDetails.push(orderItem);
                     //var idx = GlobalComponent.customerCart.indexOf(item);
                     //GlobalComponent.customerCart.splice(idx, 1);

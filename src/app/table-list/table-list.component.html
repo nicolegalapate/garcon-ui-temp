@@ -21,6 +21,9 @@
                                         Price
                                     </th>
                                     <th>
+                                        Subtotal
+                                    </th>
+                                    <th>
                                         Prep Time
                                     </th>
                                     <th>
@@ -36,7 +39,10 @@
                                             {{item.quantity}}
                                         </td>
                                         <td>
-                                            {{item.order.totalAmount}}
+                                            Php{{item.menu.price}}
+                                        </td>
+                                        <td>
+                                            Php{{item.subTotal}}
                                         </td>
                                         <td>
                                             {{item.menu.preparationTimeInMin}}
@@ -53,5 +59,69 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-3">
+                <button class="btn btn-info btn-block btn-fill" data-toggle="modal" data-target="#billdetails"
+                    (click)="billOut(1)">
+                    Bill Out
+                </button>
+            </div>
+        </div>
     </div>
+
 </div>
+
+<!--show bill details-->
+
+
+<div class="modal modal-angular fade" id="billdetails" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="margin-top">
+                    Bill Details
+                </h4>
+                <div class="separator"></div>
+                <div *ngFor="let item of orderDetails" class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <div>
+                            {{item.menu.name}} x {{item.quantity}} = {{item.subTotal}}
+                        </div>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">Total Amount</div>
+                    <div class="col-md-6">{{billoutDetails.totalAmount}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">Inclusive Tax</div>
+                    <div class="col-md-6">{{billoutDetails.inclusiveTax}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">Service Charge</div>
+                    <div class="col-md-6">{{billoutDetails.serviceCharge}}</div>
+                </div>
+                <div class="separator"></div>
+                <hr>
+                <div class="row">
+                    <div class="col-md-6">Final Bill</div>
+                    <div class="col-md-6">{{billoutDetails.finalBill}}</div>
+                </div>
+                
+                <input type="number" (keyup)="onKey($event)">
+                <button (click)="processPayment()"class="btn btn-info btn-block btn-fill" data-toggle="modal" data-target="#billdetails">
+                    Pay
+                </button>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+

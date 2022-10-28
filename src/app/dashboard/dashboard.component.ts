@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { IpService } from 'app/services/ip.service';
 import { OrderService } from 'app/services/order.service';
 import { GlobalComponent } from 'app/global.component';
+import { OrderDetailService } from 'app/services/orderdetail.service';
 
 
 
@@ -17,7 +18,12 @@ import { GlobalComponent } from 'app/global.component';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private menuService: MenuService, private ipService: IpService, private orderService: OrderService) { }
+  constructor(
+    private menuService: MenuService, 
+    private ipService: IpService, 
+    private orderService: OrderService, 
+    private orderDetailService: OrderDetailService
+    ) { }
 
   allMenuItems: any;
   appetizerItems: any;
@@ -32,38 +38,39 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.populateMenuItems();
-    //this.checkExistingTransaction();
-    //this.createOrder();!p dsdsdp!
-  }
-
-  checkExistingTransaction() { //in progress 
-    this.ipService.getIpAddress().subscribe(response => {
-      let res = JSON.parse(JSON.stringify(response));
-      this.clientIp = res.ip;
-      console.log(this.clientIp);
-      this.orderService.getOrderbyCustomerNbr(this.clientIp).subscribe(orderResponse => {
-        console.log(orderResponse);
-        let orderRes = JSON.parse(JSON.stringify(orderResponse));
-        console.log('here ' + orderRes);
-      })
-    });
-
-
+    this.createOrder();
   }
 
   createOrder() {
     this.ipService.getIpAddress().subscribe(response => {
       let res = JSON.parse(JSON.stringify(response));
-      this.clientIp = res.ip.ip;
+      this.clientIp = res.ip;
       var req = {
         "customerNumber": this.clientIp,
-        "status": 0,
-        "dateCreated": new Date()
+        "status": 0
       };
-      console.log(req);
-      this.orderService.addOrder(req).subscribe(response => {
-        console.log(response)
-      })
+      //console.log(req);
+      this.orderService.addOrder(req).subscribe(
+        {
+          next: (res) => {
+            console.log(res)
+            var r = JSON.parse(JSON.stringify(res))
+            this.retrieveTransaction(r.id);
+          },
+          error: (e) => { //error
+            if(e.error.text == "There's an active transaction for customer number " + this.clientIp) console.log('hello')
+            this.retrieveTransaction(this.clientIp);
+          },
+          complete: () => console.log("complete")
+        }
+      )
+     
+    });
+  }
+
+  retrieveTransaction(orderId){
+    this.orderDetailService.getOrderDetails(orderId).subscribe(response => {
+      GlobalComponent.customerOrders = response;
     });
   }
   populateMenuItems() {
